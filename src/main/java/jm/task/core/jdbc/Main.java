@@ -16,7 +16,10 @@ public class Main {
         daoJDBC.saveUser("Nikita", "Vasiliev", (byte) 22);
         daoJDBC.saveUser("Lena", "Soroka", (byte) 22);
 
+        //remove user with id 3 from table users
+        daoJDBC.removeUserById(3);
+
         //drop table Users
-    //    daoJDBC.dropUsersTable();
+        daoJDBC.dropUsersTable();
     }
 }
