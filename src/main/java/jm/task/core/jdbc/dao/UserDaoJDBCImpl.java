@@ -18,20 +18,29 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            String query = "CREATE TABLE users3 (id BIGINT AUTO_INCREMENT, " +
+            String query = "CREATE TABLE users (id BIGINT AUTO_INCREMENT, " +
                     "name VARCHAR(15), lastname VARCHAR(25), age TINYINT, PRIMARY KEY (id));";
             statement.executeUpdate(query);
             System.out.println("Table users was created!");
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error while creating users table");
+            System.out.println("This table already exists or incorrect sql query");
         }
     }
 
     public void dropUsersTable() {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+            String query = "DROP TABLE users";
+            statement.executeUpdate(query);
+            System.out.println("Table users was dropped!");
 
+
+        } catch (SQLException e) {
+            System.out.println("This table is not exists or incorrect sql query");
+        }
     }
 
     public void saveUser(String name, String lastName, byte age) {
