@@ -3,10 +3,8 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl extends Util implements UserDao {
@@ -20,9 +18,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             String query = "CREATE TABLE users (id BIGINT AUTO_INCREMENT, " +
                     "name VARCHAR(15), lastname VARCHAR(25), age TINYINT, PRIMARY KEY (id));";
             statement.executeUpdate(query);
-            System.out.println("РўР°Р±Р»РёС†Р° Users Р±С‹Р»Р° СЃРѕР·РґР°РЅР°!");
+            System.out.println("Таблица Users была создана!");
         } catch (SQLException e) {
-            System.out.println("Р­С‚Р° С‚Р°Р±Р»РёС†Р° СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё РІР°С€ sql-Р·Р°РїСЂРѕСЃ РЅРµРєРѕСЂСЂРµРєС‚РµРЅ");
+            System.out.println("Эта таблица уже существует или ваш sql-запрос некорректен");
         }
     }
 
@@ -30,9 +28,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             String query = "DROP TABLE users";
             statement.executeUpdate(query);
-            System.out.println("РўР°Р±Р»РёС†Р° Users Р±С‹Р»Р° СѓРґР°Р»РµРЅР°!");
+            System.out.println("Таблица Users была удалена!");
         } catch (SQLException e) {
-            System.out.println("Р­С‚РѕР№ С‚Р°Р±Р»РёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё РІР°С€ sql-Р·Р°РїСЂРѕСЃ РЅРµРєРѕСЂСЂРµРєС‚РµРЅ");
+            System.out.println("Этой таблицы не существует или ваш sql-запрос некорректен");
         }
     }
 
@@ -45,10 +43,10 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             preparedStatement.setByte(3, age);
 
             preparedStatement.executeUpdate();
-            System.out.println("User СЃ РёРјРµРЅРµРј " + name + " РґРѕР±Р°РІР»РµРЅ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…");
+            System.out.println("User с именем " + name + " добавлен в базу данных");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("РћС€РёР±РєР° РїСЂРё СЃРѕР·РґР°РЅРёРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
+            System.out.println("Ошибка при создании пользователя");
         }
     }
 
@@ -61,12 +59,31 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
+            System.out.println("Ошибка при удалении пользователя");
         }
     }
 
     public List<User> getAllUsers() {
-        return null;
+        List<User> userList = new ArrayList<>();
+        String query = "SELECT id, name, lastname, age FROM users";
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(query);
+            
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setLastName(resultSet.getString("lastname"));
+                user.setAge(resultSet.getByte("age"));
+
+                userList.add(user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при выгрузке данных всех пользователей");
+        }
+        return userList;
     }
 
     public void cleanUsersTable() {
