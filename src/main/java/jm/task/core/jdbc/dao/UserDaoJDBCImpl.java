@@ -18,7 +18,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             String query = "CREATE TABLE users (id BIGINT AUTO_INCREMENT, " +
                     "name VARCHAR(15), lastname VARCHAR(25), age TINYINT, PRIMARY KEY (id));";
             statement.executeUpdate(query);
-            System.out.println("Таблица Users была создана!");
         } catch (SQLException e) {
             System.out.println("Эта таблица уже существует или ваш sql-запрос некорректен");
         }
@@ -28,7 +27,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             String query = "DROP TABLE users";
             statement.executeUpdate(query);
-            System.out.println("Таблица Users была удалена!");
         } catch (SQLException e) {
             System.out.println("Этой таблицы не существует или ваш sql-запрос некорректен");
         }
@@ -68,7 +66,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         String query = "SELECT id, name, lastname, age FROM users";
         try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
-            
+
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -87,6 +85,12 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void cleanUsersTable() {
-
+        try (Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+            String query = "TRUNCATE TABLE users";
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Ошибка при очистке таблицы");
+        }
     }
 }

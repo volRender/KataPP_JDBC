@@ -19,11 +19,14 @@ public class Main {
         daoJDBC.saveUser("Nikita", "Vasiliev", (byte) 22);
         daoJDBC.saveUser("Lena", "Soroka", (byte) 22);
 
-        //get all users info from database
+        //get all users info from the table
         List<User> userList = daoJDBC.getAllUsers();
         for (User u :userList) {
             System.out.println(u);
         }
+
+        //clean all data from the table
+        daoJDBC.cleanUsersTable();
 
         //drop table Users
         daoJDBC.dropUsersTable();
