@@ -13,7 +13,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
 
     }
 
-    public void createUsersTable() {
+    public void createUsersTable() throws SQLException {
         Statement statement = null;
         try {
             connection = getConnection();
@@ -32,23 +32,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Эта таблица уже существует или произошла иная ошибка операции");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                statement.close();
             }
         }
     }
 
-    public void dropUsersTable() {
+    public void dropUsersTable() throws SQLException {
         Statement statement = null;
         try {
             connection = getConnection();
@@ -66,23 +58,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Этой таблицы не существует или произошла иная ошибка операции");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                statement.close();
             }
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
         PreparedStatement preparedStatement = null;
         String query = "INSERT INTO users (name, lastname, age) values(?, ?, ?)";
         try {
@@ -106,23 +90,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Ошибка при создании пользователя");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                preparedStatement.close();
             }
         }
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
         PreparedStatement preparedStatement = null;
         String query = "DELETE FROM users where ID=?";
         try {
@@ -142,23 +118,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Ошибка при удалении пользователя");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                preparedStatement.close();
             }
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws SQLException {
         List<User> userList = new ArrayList<>();
         String query = "SELECT id, name, lastname, age FROM users";
         Statement statement = null;
@@ -189,24 +157,16 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Ошибка при выводе данных таблицы");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                statement.close();
             }
         }
         return userList;
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable() throws SQLException {
         Statement statement = null;
         try {
             connection = getConnection();
@@ -225,18 +185,10 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             System.out.println("Ошибка при очистке таблицы");
         } finally {
             if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                connection.close();
             }
             if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                statement.close();
             }
         }
     }
